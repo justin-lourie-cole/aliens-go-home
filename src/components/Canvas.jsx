@@ -1,12 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-import { Sky } from './Sky'
-import { Ground } from './Ground'
-import { CannonBase } from './CannonBase'
-import { CannonPipe } from './CannonPipe'
+import { Sky, Ground, CannonPipe, CannonBase } from './'
 
-export const Canvas = props => {
+import { moveObjects } from '../slice'
+import { getCanvasPosition } from '../utils/formulas'
+
+export const Canvas = () => {
+  const dispatch = useDispatch()
+
+  let mouseCanvasPosition
+
+  useEffect(() => {
+    setInterval(() => {
+      dispatch(moveObjects(mouseCanvasPosition))
+    }, 10)
+  })
+
+  const trackMouse = event => {
+    mouseCanvasPosition = getCanvasPosition(event)
+  }
+
   const viewBox = [
     window.innerWidth / -2,
     100 - window.innerHeight,
@@ -17,17 +31,12 @@ export const Canvas = props => {
     <svg
       id="aliens-go-home-canvas"
       preserveAspectRatio="xMaxYMax none"
-      onMouseMove={props.trackMouse}
+      onMouseMove={trackMouse}
       viewBox={viewBox}>
       <Sky />
       <Ground />
-      <CannonPipe rotation={props.angle} />
+      <CannonPipe />
       <CannonBase />
     </svg>
   )
-}
-
-Canvas.propTypes = {
-  angle: PropTypes.number.isRequired,
-  trackMouse: PropTypes.func.isRequired
 }

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import gameReducer from './slice'
+import objectsReducer from './objectsSlice'
 
-const store = configureStore({ reducer: gameReducer })
+const store = configureStore({ reducer: objectsReducer })
 
 export default store
